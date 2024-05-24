@@ -33,7 +33,7 @@ def send_email():
 
     try:
         mail.send(msg)
-        return 'Email enviado com sucesso!'
+        return 'Email enviado com sucesso!!'
     except Exception as e:
         app.logger.error('Failed to send email', exc_info=True)
         return str(e), 500  # Retorna a string da exceção e o status 500 para indicar erro no servidor
