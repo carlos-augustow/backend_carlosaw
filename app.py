@@ -34,9 +34,11 @@ def teste_post():
 
 @app.route('/send_email/', methods=['POST'])
 def send_email():
-    recipient = request.form['email']
+
+    data = request.get_json();
+    recipient = data.get['email']
     subject = "Contato carlosaw"
-    message_body = request.form['message']
+    message_body = data.get['message']
 
     msg = Message(subject,
                   sender=app.config['MAIL_USERNAME'],
@@ -53,9 +55,10 @@ def send_email():
 
 @app.route('/send_email_to_me/', methods=['POST'])
 def send_email_to_me():
+    data = request.get_json();
     recipient = "carlos_augusto_wallauer@outlook.com"  # E-mail fixo do destinatário
-    subject = "from carlosaw: " + request.form['email']
-    message_recived = request.form['message']
+    subject = "from carlosaw: " + data.get['email']
+    message_recived = data.get['message']
 
     msg = Message(subject,
                   sender=app.config['MAIL_USERNAME'],
