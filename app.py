@@ -52,18 +52,25 @@ def send_email():
         app.logger.error('Failed to send email', exc_info=True)
         return str(e), 500  # Retorna a string da exceção e o status 500 para indicar erro no servidor
 
-
 @app.route('/send_email_to_me/', methods=['POST'])
 def send_email_to_me():
-    data = request.get_json();
-    recipient = "carlos_augusto_wallauer@outlook.com"  # E-mail fixo do destinatário
-    subject = "from carlosaw: " + data.get['email']
-    message_recived = data.get['message']
+    data = request.get_json()
+    
+    # Correção: Acessar o método get com parênteses
+    subject = "from carlosaw: " + data.get('email', 'sem email')
+    name = data.get('name', 'sem nome')
+    message_received = data.get('message', 'sem mensagem')
 
+    # Montar o corpo da mensagem
+    send_message = f"Nome: {name}\nEmail: {data.get('email')}\nMensagem: {message_received}"
+
+    recipient = "carlos_augusto_wallauer@outlook.com"  # E-mail fixo do destinatário
+    
+    # Criar a mensagem a ser enviada
     msg = Message(subject,
                   sender=app.config['MAIL_USERNAME'],
                   recipients=[recipient])
-    msg.body = message_recived
+    msg.body = send_message
 
     try:
         mail.send(msg)
@@ -71,7 +78,6 @@ def send_email_to_me():
     except Exception as e:
         app.logger.error('Failed to send email', exc_info=True)
         return str(e), 500  # Retorna a string da exceção e o status 500 para indicar erro no servidor
-
 
 
 
