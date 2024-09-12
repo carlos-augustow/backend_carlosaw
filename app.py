@@ -16,7 +16,7 @@ app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
 mail = Mail(app)
 
-@app.route('/')
+@app.route('/hello/', methods=['GET'])
 def hello_world():
     return 'Hello World!'
 
