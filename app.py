@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 
@@ -19,6 +19,18 @@ mail = Mail(app)
 @app.route('/')
 def hello_world():
     return 'Hello World!'
+
+@app.route('/teste_post/', methods=['POST'])
+def teste_post():
+    data = request.get_json()  # Obtém o JSON enviado
+    m = data.get('mensagem')
+    e = data.get('email')
+    n = data.get('nome')
+    return jsonify({"message": f"Olá {n}, email: {e}, mensagem: {m}"})  # Retorna uma resposta em JSON
+
+
+
+
 
 @app.route('/send_email/', methods=['POST'])
 def send_email():
