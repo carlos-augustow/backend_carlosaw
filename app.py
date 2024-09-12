@@ -13,6 +13,7 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')  # Adiciona o remetente padrão
 
 mail = Mail(app)
 
@@ -52,11 +53,12 @@ def send_email():
         app.logger.error('Failed to send email', exc_info=True)
         return str(e), 500  # Retorna a string da exceção e o status 500 para indicar erro no servidor
 
+
+
 @app.route('/send_email_to_me/', methods=['POST'])
 def send_email_to_me():
     data = request.get_json()
     
-    # Correção: Acessar o método get com parênteses
     subject = "from carlosaw: " + data.get('email', 'sem email')
     name = data.get('name', 'sem nome')
     message_received = data.get('message', 'sem mensagem')
@@ -68,7 +70,7 @@ def send_email_to_me():
     
     # Criar a mensagem a ser enviada
     msg = Message(subject,
-                  sender=app.config['MAIL_USERNAME'],
+                  sender=app.config['MAIL_USERNAME'],  # Isso agora será o padrão
                   recipients=[recipient])
     msg.body = send_message
 
@@ -77,8 +79,7 @@ def send_email_to_me():
         return 'Email enviado com sucesso!'
     except Exception as e:
         app.logger.error('Failed to send email', exc_info=True)
-        return str(e), 500  # Retorna a string da exceção e o status 500 para indicar erro no servidor
-
+        return str(e), 500
 
 
 
